@@ -11,11 +11,23 @@ type sighInInput struct {
 	Password string `json:"password" binding:"required"`
 }
 
+// @Summary Sign In
+// @Tags auth
+// @Description User sign in
+// @ID sign-in
+// @Accept  json
+// @Produce  json
+// @Param input body sighInInput true "Sign In Input"
+// @Success 200 {object} map[string]interface{} "token"
+// @Failure 400 {object} errorResponse "Invalid input body"
+// @Failure 500 {object} errorResponse "Internal Server Error"
+// @Router /auth/sign-in [post]
+
 func (h *Handler) signIn(c *gin.Context) {
 	var input sighInInput
 
 	if err := c.BindJSON(&input); err != nil {
-		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		newErrorResponse(c, http.StatusBadRequest, "invalid input body")
 		return
 	}
 
@@ -30,11 +42,22 @@ func (h *Handler) signIn(c *gin.Context) {
 	})
 }
 
+// @Summary Sign Up
+// @Tags auth
+// @Description User sign up
+// @ID sign-up
+// @Accept  json
+// @Produce  json
+// @Param input body todo.User true "Sign Up Input"
+// @Success 200 {object} map[string]interface{} "id"
+// @Failure 400 {object} errorResponse "Invalid input body"
+// @Failure 500 {object} errorResponse "Internal Server Error"
+// @Router /sign-up [post]
 func (h *Handler) signUp(c *gin.Context) {
 	var input todo.User
 
 	if err := c.BindJSON(&input); err != nil {
-		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		newErrorResponse(c, http.StatusBadRequest, "invalid input body")
 		return
 	}
 

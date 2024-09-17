@@ -19,6 +19,15 @@ const (
 	port = "port"
 )
 
+// @title TodoApp API
+// @version 1.0
+// @description This is a sample server for managing todo items.
+// @host localhost:8099
+// @BasePath /
+
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
 	logrus.SetFormatter(new(logrus.JSONFormatter))
 

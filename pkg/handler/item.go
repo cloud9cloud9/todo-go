@@ -7,6 +7,18 @@ import (
 	todo "todo-app"
 )
 
+// @Summary Create Todo Item
+// @Tags items
+// @Description Create a new item in the todo list
+// @ID create-item
+// @Accept  json
+// @Produce  json
+// @Param id path int true "List ID"
+// @Param input body todo.TodoItem true "Todo Item Input"
+// @Success 200 {object} map[string]interface{} "id"
+// @Failure 400 {object} errorResponse "Invalid input body or list ID"
+// @Failure 500 {object} errorResponse "Internal Server Error"
+// @Router /lists/{id}/items [post]
 func (h *Handler) createItem(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -37,6 +49,17 @@ func (h *Handler) createItem(c *gin.Context) {
 	})
 }
 
+// @Summary Get All Todo Items
+// @Tags items
+// @Description Get all items from a specific todo list
+// @ID get-all-items
+// @Accept  json
+// @Produce  json
+// @Param id path int true "List ID"
+// @Success 200 {array} todo.TodoItem
+// @Failure 400 {object} errorResponse "Invalid list ID"
+// @Failure 500 {object} errorResponse "Internal Server Error"
+// @Router /lists/{id}/items [get]
 func (h *Handler) getAllItems(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -59,6 +82,17 @@ func (h *Handler) getAllItems(c *gin.Context) {
 	c.JSON(http.StatusOK, items)
 }
 
+// @Summary Get Todo Item By ID
+// @Tags items
+// @Description Get a specific item by its ID from a todo list
+// @ID get-item-by-id
+// @Accept  json
+// @Produce  json
+// @Param id path int true "Item ID"
+// @Success 200 {object} todo.TodoItem
+// @Failure 400 {object} errorResponse "Invalid item ID"
+// @Failure 500 {object} errorResponse "Internal Server Error"
+// @Router /items/{id} [get]
 func (h *Handler) getItemById(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -81,6 +115,18 @@ func (h *Handler) getItemById(c *gin.Context) {
 	c.JSON(http.StatusOK, item)
 }
 
+// @Summary Update Todo Item
+// @Tags items
+// @Description Update an existing todo item by its ID
+// @ID update-item
+// @Accept  json
+// @Produce  json
+// @Param id path int true "Item ID"
+// @Param input body todo.UpdateItemInput true "Update Todo Item Input"
+// @Success 200 {object} statusResponse "ok"
+// @Failure 400 {object} errorResponse "Invalid item ID or input body"
+// @Failure 500 {object} errorResponse "Internal Server Error"
+// @Router /items/{id} [put]
 func (h *Handler) updateItem(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -108,6 +154,17 @@ func (h *Handler) updateItem(c *gin.Context) {
 	c.JSON(http.StatusOK, statusResponse{"ok"})
 }
 
+// @Summary Delete Todo Item
+// @Tags items
+// @Description Delete an existing todo item by its ID
+// @ID delete-item
+// @Accept  json
+// @Produce  json
+// @Param id path int true "Item ID"
+// @Success 200 {object} statusResponse "ok"
+// @Failure 400 {object} errorResponse "Invalid item ID"
+// @Failure 500 {object} errorResponse "Internal Server Error"
+// @Router /items/{id} [delete]
 func (h *Handler) deleteItem(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {

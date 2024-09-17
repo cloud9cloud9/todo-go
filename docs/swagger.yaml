@@ -1,0 +1,428 @@
+basePath: /
+definitions:
+  handler.errorResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  handler.getAllListsResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/todo_app.TodoList'
+        type: array
+    type: object
+  handler.statusResponse:
+    properties:
+      status:
+        type: string
+    type: object
+  todo_app.TodoItem:
+    properties:
+      description:
+        type: string
+      done:
+        type: boolean
+      id:
+        type: integer
+      title:
+        type: string
+    required:
+    - title
+    type: object
+  todo_app.TodoList:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+    required:
+    - title
+    type: object
+  todo_app.UpdateItemInput:
+    properties:
+      description:
+        type: string
+      done:
+        type: boolean
+      title:
+        type: string
+    type: object
+  todo_app.UpdateListInput:
+    properties:
+      description:
+        type: string
+      title:
+        type: string
+    type: object
+  todo_app.User:
+    properties:
+      name:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - name
+    - password
+    - username
+    type: object
+host: localhost:8099
+info:
+  contact: {}
+  description: This is a sample server for managing todo items.
+  title: TodoApp API
+  version: "1.0"
+paths:
+  /items/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an existing todo item by its ID
+      operationId: delete-item
+      parameters:
+      - description: Item ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/handler.statusResponse'
+        "400":
+          description: Invalid item ID
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Delete Todo Item
+      tags:
+      - items
+    get:
+      consumes:
+      - application/json
+      description: Get a specific item by its ID from a todo list
+      operationId: get-item-by-id
+      parameters:
+      - description: Item ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/todo_app.TodoItem'
+        "400":
+          description: Invalid item ID
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Get Todo Item By ID
+      tags:
+      - items
+    put:
+      consumes:
+      - application/json
+      description: Update an existing todo item by its ID
+      operationId: update-item
+      parameters:
+      - description: Item ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update Todo Item Input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/todo_app.UpdateItemInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/handler.statusResponse'
+        "400":
+          description: Invalid item ID or input body
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Update Todo Item
+      tags:
+      - items
+  /lists:
+    get:
+      consumes:
+      - application/json
+      description: Get all todo lists for a user
+      operationId: get-all-lists
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.getAllListsResponse'
+        "400":
+          description: Invalid User ID
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Get All Todo Lists
+      tags:
+      - lists
+    post:
+      consumes:
+      - application/json
+      description: Create a new todo list
+      operationId: create-list
+      parameters:
+      - description: Todo List Input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/todo_app.TodoList'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: id of the created list
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid User ID or input body
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Create Todo List
+      tags:
+      - lists
+  /lists/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an existing todo list by its ID
+      operationId: delete-list
+      parameters:
+      - description: List ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/handler.statusResponse'
+        "400":
+          description: Invalid list ID
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Delete Todo List
+      tags:
+      - lists
+    get:
+      consumes:
+      - application/json
+      description: Get a specific todo list by its ID
+      operationId: get-list-by-id
+      parameters:
+      - description: List ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/todo_app.TodoList'
+        "400":
+          description: Invalid list ID
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Get Todo List By ID
+      tags:
+      - lists
+    put:
+      consumes:
+      - application/json
+      description: Update an existing todo list by its ID
+      operationId: update-list
+      parameters:
+      - description: List ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update Todo List Input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/todo_app.UpdateListInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/handler.statusResponse'
+        "400":
+          description: Invalid list ID or input body
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Update Todo List
+      tags:
+      - lists
+  /lists/{id}/items:
+    get:
+      consumes:
+      - application/json
+      description: Get all items from a specific todo list
+      operationId: get-all-items
+      parameters:
+      - description: List ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/todo_app.TodoItem'
+            type: array
+        "400":
+          description: Invalid list ID
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Get All Todo Items
+      tags:
+      - items
+    post:
+      consumes:
+      - application/json
+      description: Create a new item in the todo list
+      operationId: create-item
+      parameters:
+      - description: List ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Todo Item Input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/todo_app.TodoItem'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: id
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid input body or list ID
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Create Todo Item
+      tags:
+      - items
+  /sign-up:
+    post:
+      consumes:
+      - application/json
+      description: User sign up
+      operationId: sign-up
+      parameters:
+      - description: Sign Up Input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/todo_app.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: id
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid input body
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Sign Up
+      tags:
+      - auth
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
